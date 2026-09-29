@@ -6,6 +6,7 @@
  [[universidade/2ano/1semestre/SCR/TPs/relatorio/lncs-paper.pdf|lncs-paper.pdf]]
  [[universidade/2ano/1semestre/SCR/TPs/relatorio/lncs-paper.tex|lncs-paper.tex]]
  [[universidade/2ano/1semestre/SCR/TPs/relatorio/mybibliography.bib|mybibliography.bib]]
+ [[universidade/2ano/1semestre/SCR/TPs/relatorio/notes|notes]]
  [[universidade/2ano/1semestre/SCR/TPs/relatorio/README|README]]
  [[universidade/2ano/1semestre/SCR/TPs/relatorio/splncs.bst|splncs.bst]]
  [[universidade/2ano/1semestre/SCR/TPs/relatorio/splncs04.bst|splncs04.bst]]

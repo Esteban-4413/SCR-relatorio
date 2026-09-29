@@ -1,0 +1,29 @@
+\begin{thebibliography}{1}
+
+\bibitem{sample1}
+Knuth, D.E.:
+\newblock The \TeX{} Book.
+\newblock Addison-Wesley Professional (1986)
+
+\bibitem{sample2}
+Mittelbach, F., Gossens, M., Braams, J., Carlisle, D., Rowley, C.:
+\newblock The \LaTeX{} Companion. 2 edn.
+\newblock Addison-Wesley Professional (2004)
+
+\bibitem{sample3}
+Lamport, L.:
+\newblock \LaTeX: a Document Preparation System. 2 edn.
+\newblock Addison Wesley, Massachusetts (1994)
+
+\bibitem{sample4}
+Knuth, D.E.:
+\newblock Literate programming.
+\newblock The Computer Journal \textbf{27}(2) (1984)  97--111
+
+\bibitem{sample5}
+Lesk, M., Kernighan, B.:
+\newblock Computer typesetting of technical journals on {UNIX}.
+\newblock In: Proceedings of American Federation of Information Processing
+  Societies: 1977 National Computer Conference, Dallas, Texas (1977)  879--888
+
+\end{thebibliography}
