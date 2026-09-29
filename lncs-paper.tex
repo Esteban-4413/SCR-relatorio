@@ -1,0 +1,112 @@
+\documentclass{llncs}
+\usepackage{times}
+\usepackage[T1]{fontenc}
+
+% Comentar para not MAC Users
+\usepackage[applemac]{inputenc}
+
+\usepackage{a4}
+%\usepackage[margin=3cm,nohead]{geometry}
+\usepackage{epstopdf}
+\usepackage{graphicx}
+\usepackage{fancyvrb}
+\usepackage{amsmath}
+%\renewcommand{\baselinestretch}{1.5}
+
+
+\logo{EC}{Escola de CiÍncias}{}
+\logoB{EC}{Escola de CiÍncias}{}
+
+\begin{document}
+\mainmatter
+\title{Paper Title}
+
+\titlerunning{Paper Title}
+
+\author{Autor1 \and Autor2 \and Autor3}
+
+\authorrunning{Autor1 \and Autor2 \and Autor3}
+
+\institute{
+University of Minho, Department of  Informatics, 4710-057 Braga, Portugal\\
+e-mail: \{aXXXXX,aYYYYY,aZZZZZ\}@alunos.uminho.pt
+}
+
+\date{}
+\bibliographystyle{splncs}
+
+\maketitle
+\begin{abstract}
+Resumo...
+\end{abstract}
+
+\section{Introduction}
+
+
+\section{One more section}
+
+\subsection{One subsection}
+abdc...
+\subsection{One more...}
+
+%UNCOMMENT se necessário
+%De acordo com o ilustrado na Figura~\ref{fig:controller}
+%% Exemplo para inserção de uma figura
+%\begin{figure}
+%\begin{center}
+%\includegraphics[scale=0.40]{figura.pdf} 
+%\end{center}
+%\caption{\label{fig:controller}Architecture of the unified QoS metric fuzzy controller.}
+%\end{figure} 
+
+According to Table~\ref{tab:TabelaExemplo}...
+
+% Exemplo de uma tabela com duas colunas
+\begin{figure}
+\centering
+\begin{tabular}{|c|c|}\hline
+(a) Delay and jiiter & (b) Delay and loss \\ \hline
+
+(c) Delay and throughput & (d) Jitter and loss \\ \hline
+
+(e) Jitter and throughput & (f) Loss and throughput \\ \hline
+\end{tabular}
+\caption{\label{tab:TabelaExemplo}Tabela exemplo.}
+\end{figure}
+
+%\section{Simulation Scenario}
+
+\section{Conclusions}
+Neste trabalho...
+
+
+\bibliographystyle{splncs04}
+\bibliography{mybibliography}
+%
+% Below is a bibliography sample using the mandatory style if you choose not to
+% use a .bib file via BibTeX.
+% 
+% \begin{thebibliography}{8}
+% \bibitem{ref_article1}
+% Author, F.: Article title. Journal \textbf{2}(5), 99--110 (2016)
+
+% \bibitem{ref_lncs1}
+% Author, F., Author, S.: Title of a proceedings paper. In: Editor,
+% F., Editor, S. (eds.) CONFERENCE 2016, LNCS, vol. 9999, pp. 1--13.
+% Springer, Heidelberg (2016). \doi{10.10007/1234567890}
+
+% \bibitem{ref_book1}
+% Author, F., Author, S., Author, T.: Book title. 2nd edn. Publisher,
+% Location (1999)
+
+% \bibitem{ref_proc1}
+% Author, A.-B.: Contribution title. In: 9th International Proceedings
+% on Proceedings, pp. 1--2. Publisher, Location (2010)
+
+% \bibitem{ref_url1}
+% LNCS Homepage, \url{http://www.springer.com/lncs}. Last accessed 4
+% Oct 2017
+% \end{thebibliography}
+%
+
+\end{document}
