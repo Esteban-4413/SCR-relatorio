@@ -1,0 +1,10 @@
+relatorio.md
+*.aux
+*.log
+*.fls
+*.fdb_latexmk
+
+*.bbl
+*.blg
+
+*.pdf
