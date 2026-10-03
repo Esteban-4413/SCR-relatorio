@@ -38,6 +38,40 @@ Tenants
 
 - Avaliação Contínua: Os algoritmos de avaliação de confiança utilizam métodos matemáticos avançados, tais como machine learning e lógica difusa, para recalcular o risco dinamicamente.
 
+### Fonte 4
+Title: Theory and Application of Zero Trust Security: A Brief Survey
+Authors:
+  - Liu, Gang
+  - Wang, Quan
+  - Meng, Lei
+  - Liu, Ling
+Date: 12/2023
+
+#### Abstract
+> [!quote]
+> Zero trust is a novel paradigm for cybersecurity based on the core concept of "never trust, always verify"
+
+#### Section 1: Introduction
+>[!quote]
+> Traditional network security is based on the concept of a security perimeter whereby the network is divided into two parts: an internal trusted network and an external untrusted network. Based on this partition criterion, a well-structured defensive architecture treats the security of the network as an onion, and each perimeter protects the area it covers
+
+>[!quote]
+> The concept of zero trust, "never trust, always verify" was first proposed by John Kindervag in 2010 to address the issues caused by insider threats to enterprise
+
+The three principles Kindervag proposed for zero trust security are:
+1. All sources must be verified and secured;
+2. Access control must be limited and strictly controlled;
+3. All network traffic must be inspected and logged.
+
+The application of zero trust has been developed in parallel with the study of its theory. We have the example of Google that proposed a new zero-trust-based security method for its internal networks that eliminates privileged corporate networks. In the proposed method, all access to enterprise resources must be fully authenticated, authorized, and encrypted based upon the device state and user credentials. By 2017, the method became fully implemented in the Google office network. It proved to be secure and made critical resources easily accessible when remote work became the norm during the COVID-19 outbreak. As zero trust gains wide attention, zero trust security is receiving greater scholarly attention, as more scholars attempt to address network security issues using abstract methods and architectures. 
+
+The National Institute of Standards and Technology (NIST) integrated the research on zero trust and proposed the zero trust architecture (ZTA) as a basic security paradigm 
+
+#### Section 2: Conceptual background
+Definition of trust by Rousseau et al.: A psychological state comprising the intention to accept vulnerability based upon positive expectations of the intentions or behavior of another.
+
+Even though this is a generally accepted definition of trust it does not fully capture the dynamics of the concept trust and its implications in cybersecurity. The classification os trust has always been determined by the context. With complexity and ambiguity, trust is classified based on the context. 
+
 # Notas sobre o relatório
 
 ## Estrutura

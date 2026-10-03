@@ -19,16 +19,16 @@
 \begin{document}
 \title{Paper Title}
 
-\author{Autor1 \and Autor2 \and Autor3}
+\author{David Lobo \and Pedro Rosa \and Esteban Yepez}
 
-\authorrunning{Autor1 \and Autor2 \and Autor3}
+\authorrunning{David Lobo \and Pedro Rosa \and Esteban Yepez}
 
 \institute{
 University of Minho, Department of  Informatics, 4710-057 Braga, Portugal\\
-e-mail: \{aXXXXX,aYYYYY,aZZZZZ\}@alunos.uminho.pt
+e-mail: \{a117634,aYYYYY,aZZZZZ\}@alunos.uminho.pt
 }
 
-\date{}
+\date{06/10/2026}
 
 \bibliographystyle{splncs}
 
@@ -38,16 +38,50 @@ e-mail: \{aXXXXX,aYYYYY,aZZZZZ\}@alunos.uminho.pt
 
 \end{abstract}
 
-\section{Introduction}
+\section{Introdução}
+A segurança de redes, durante muitos anos, baseio-se no conceito de um perímetro onde a rede 
+é dívida numa zona interna, considerada de confiança, e numa zona externa, considerada hostil.
+entre a zona interna e fiável da rede e a sua zona externa. Esta fronteira era defendida por mecanismos como
+\textit{firewalls}, sistemas de deteção e prevenção de intrusões (IDS/IPS) e redes
+privadas virtuais (VPN)~\cite{kang2023}. Assim, de acordo com esta ideia, a confiança 
+resulta da localização de uma pessoa: qualquer pessoa que se encontre dentro do perímetro é 
+automaticamente considerada de confiança.No entanto, Esta premissa já não é sustentável dado a adoção generalizada da \textit{cloud}, a proliferação de
+dispositivos (incluindo os pessoais e os da Internet das Coisas (IoT)\footnote{A Internet das Coisas (IoT) refere-se a uma rede de dispositivos físicos, 
+veículos, eletrodomésticos e outros objetos físicos equipados com sensores, software e conectividade de rede, o que lhes permite recolher e partilhar dados.~\cite{ibm_iot}}), 
+o aumento do teletrabalho e demais coisas que acabaram por contribuir na disolução da fronteira da rede. Outro problema desta arquitetura é 
+parte significativa das ameaças tem origem no interior da própria organização~\cite{kang2023}. Uma vez ultrapassado o perímetro, 
+um atacante, ou um utilizador legítimo comprometido, pode movimentar-se lateralmente com muito poucas restrições.
 
+Neste contexto surge o conceito de \textit{zero trust}, ``nunca confiar, verificar sempre'' proposto pela primeira vez em 2010 por John Kindervag
+como o fim de dar resposta às ameaças internas~\cite{kindervag2010}, e foi posteriormente consolidada pelo \textit{National Institute of Standards and Technology} (NIST) na publicação especial 
+SP 800-207, que a define como um conjunto de princípios orientadores para o desenho de sistemas e operações, e não como uma arquitetura 
+única~\cite{rose2020}. Na prática, deixa de existir a
+distinção entre utilizadores internos e externos: todos os pedidos de acesso são
+autenticados, autorizados e avaliados, independentemente da sua origem. Um exemplo
+é o projeto BeyondCorp da Google. A abordagem deste processo de segurança era baseada~
+no modelo \texit{zero trust} para as suas redes internas, que elimina as redes corporativas privilegiadas. 
+É necessário que o acesso do utilizador seja totalmente aprovado, bem como todas as credenciais do dispositivo 
+do utilizador. A técnica foi totalmente integrada na rede do Google Office em 2017. Quando o teletrabalho se tornou 
+comum durante a pandemia da COVID-19, revelou-se segura e tornou os recursos vitais prontamente disponíveis.~\cite{ward2014}.
 
-\section{One more section}
-\subsection{One subsection}
+Apesar do interesse crescente, a investigação sobre a \textit{Zero Trust Architecture}
+(ZTA) encontra-se ainda numa fase inicial, sendo escassas as implementações
+documentadas e as medidas quantitativas de desempenho~\cite{fernandez2024}. Este
+relatório procura contribuir para uma visão estruturada do tema. Está organizado da
+seguinte forma: a Secção~2 apresenta os fundamentos da ZTA, incluindo o conceito de
+confiança e o modelo lógico do NIST; a Secção~3 descreve os pilares técnicos e a
+avaliação contínua de confiança; a Secção~4 analisa os domínios de aplicação; e a
+Secção~5 discute os desafios de implementação e conclui o trabalho. 
 
+\section{Fundamentos base}
 
-\subsection{One more...}
+\subsection{O conceito de confiança}
 
-\section{Conclusions}
+\section{Avaliação contínua de confiança}
+
+\section{Dominínios de aplicação}
+
+\section{Conclusão}
 
 \bibliography{mybibliography}
 
