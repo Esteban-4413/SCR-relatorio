@@ -63,7 +63,7 @@ A integração da ZTA em sistemas de larga escala, como a Internet das Coisas M�
 
 \noindent\textbf{Referências}
 \begin{enumerate}
-    \item IEEE Xplore, ``Trust-Aware and Latency-Constrained Task Offloading in IoMT via Federated Reinforcement Learning,'' IEEE. Disponível em: \url{https://ieeexplore.ieee.org/document/11072390}
+    \item IEEE Xplore, ``Secure Latency-Aware Task Offloading Using Federated Learning and Zero Trust in Edge Computing for IoMT''IEEE. Disponível em: \url{https://ieeexplore.ieee.org/document/11072390}
 \end{enumerate}
 
 \end{document}
