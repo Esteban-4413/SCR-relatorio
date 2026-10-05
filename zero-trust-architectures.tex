@@ -98,7 +98,111 @@ não implica uma ausência total de confiança, mas sim \textbf{zero confiança 
 a confiança é inicialmente concedida de forma explícita, com a granularidade mínima
 essencial, dependente do contexto e sujeita a avaliação constante~\cite{kang2023}.
 
-\section{Avaliação contínua de confiança}
+\subsection{Princípios da \textit{Zero Trust Architecture}}
+
+O NIST organiza a ZTA em sete princípios (\textit{tenets}), que
+concretizam a premissa ``nunca confiar, verificar sempre''~\cite{rose2020}:
+
+\begin{enumerate}
+  \item Todas as fontes de dados e serviços informáticos são considerados recursos.
+  \item Todas as comunicações são protegidas, independentemente da localização na rede.
+  \item O acesso aos recursos individuais da empresa é concedido numa base por sessão.
+  \item Cada pedido de acesso é avaliado por uma política dinâmica. Esta política dinâmica deve ter em conta a identidade e a autenticação, bem como o estado de segurança do dispositivo e outros fatores contextuais.
+  \item A autenticação e a autorização são rigorosamente aplicadas antes de ser concedido acesso a um recurso ao utilizador.
+  \item A empresa monitoriza e avalia a integridade e o estado de segurança de todos os ativos próprios e associados.
+  \item Registo e reavaliação contínua do estado atual dos ativos, da infraestrutura de rede e das comunicações
+\end{enumerate}
+
+Estes princípios podem ser resumidos em duas ideias: o acesso é determinado por recurso e
+por sessão, e a confiança concedida varia consoante o contexto e é reavaliada ao longo
+do tempo, em consonância com o conceito de confiança explícita e dinâmica descrito na
+Secção 2.1 \cite{kang2023}. Fernandez e Brazhuk observam que, na prática, as propostas de ZTA
+incorporam, pelo menos, os princípios clássicos de Saltzer e Schroeder relativos ao
+sistema fechado, ao privilégio mínimo e à mediação total~\cite{fernandez2024}.
+
+\subsection{Modelo lógico do NIST}
+
+Para além dos princípios, o NIST sugere um modelo lógico que inclui componentes funcionais,
+os quais, segundo Fernandez e Brazhuk, representam uma síntese do trabalho já realizado
+até ao ano de 2020~\cite{fernandez2024}. O modelo, apresentado na Figura~\ref{fig:nist}, distingue
+entre um \textit{sujeito} que pretende aceder a um recurso e o próprio \textit{recurso}
+(um sistema, uma aplicação, um conjunto de informações ou um serviço). Entre os dois situa-se o
+ponto de tomada de decisão e de aplicação de políticas~\cite{rose2020,kang2023}.
+
+\begin{figure}[t]
+  \centering
+  \fbox{\parbox{0.9\textwidth}{\centering Figura do modelo lógico da ZTA\\
+  (plano de controlo: \textit{Policy Engine} + \textit{Policy Administrator} = PDP;\\
+  plano de dados: Sujeito $\to$ PEP $\to$ Recurso)}}
+  \caption{Modelo lógico da ZTA do NIST, adaptado de~\cite{rose2020}.}
+  \label{fig:nist}
+\end{figure}
+
+Os principais componentes são os seguintes:
+
+\begin{itemize}
+  \item \textbf{\textit{Ponto de Decisão de Política} (PDP).} Este é o núcleo do
+  plano de controlo e é responsável pela autenticação e autorização, concedendo acesso
+  com base num nível de confiança que satisfaça as políticas do sistema~\cite{kang2023}. Está dividido
+  em dois componentes:
+  \begin{itemize}
+    \item o \textit{Mecanismo de Política} (PE), que toma a decisão final de conceder,
+    negar ou revogar o acesso, utilizando um algoritmo de confiança~\cite{fernandez2024};
+    \item o \textit{Administrador de Políticas} (PA), que executa a decisão do PE — ou seja,
+    estabelece ou encerra o caminho de comunicação entre o sujeito e o recurso, gera
+    credenciais de sessão ou \textit{tokens} e configura o PEP~\cite{dhiman2024}.
+  \end{itemize}
+  \item \textbf{\textit{Ponto de Aplicação de Políticas} (PEP).} É o núcleo do
+  plano de dados. Interage com o sujeito, encaminha os pedidos de acesso para o PDP e autoriza,
+  monitoriza e encerra a ligação entre o sujeito e o recurso~\cite{kang2023,dhiman2024}.
+\end{itemize}
+
+Além disso, o modelo distingue entre duas áreas. O indivíduo encontra-se numa área não confiável e
+só após ter sido aprovado pelo PDP/PEP é que o recurso passa para uma área de
+confiança implícita~\cite{rose2020}. Esta área deve ser reduzida ao mínimo possível,
+o que é consistente com a ideia de eliminar a confiança implícita.
+
+O PE não toma decisões de forma isolada. Recebe informações de várias fontes de dados, incluindo
+o sistema de diagnóstico e mitigação contínuos (CDM), informações sobre a conformidade
+com as normas do setor, \textit{feeds de inteligência de ameaças}, registos de atividade,
+registos de atividade, diretrizes de acesso a dados, a infraestrutura de chave pública (PKI),
+o sistema de gestão de identidades e o sistema de gestão de informações e eventos de segurança
+(SIEM)~\cite{fernandez2024,dhiman2024}. Com base nestes dados, o
+algoritmo de confiança determina o valor utilizado na decisão, um tema que será abordado
+na Secção 3.
+
+O modelo apresenta também limitações identificadas na literatura. Fernandez e Brazhuk
+observam que não esclarece em que momento cada entrada é tida em conta, nem como
+certas fontes — tais como o SIEM ou a conformidade com normas — são utilizadas, e que a
+distinção entre o plano de dados e o plano de controlo é um aspeto da implementação e
+não de um modelo conceptual~\cite{fernandez2024}. Eles também observam que o PDP do NIST combina
+as funções de tomada de decisão, gestão e informação do XACML e utiliza
+políticas relativamente simples, como o RBAC ou o ABAC~\cite{fernandez2024}.
+
+\section{Pilares técnicos fundamentais e a avaliação de confiança}
+Os pilares técnicos fundamentais e a avaliação de confiança da Zero Trust Architecture (ZTA) são especificados da seguinte forma:
+
+\subsection{Autenticação de Identidade}
+A ZTA exige uma autenticação robusta e dinâmica para todos os pedidos de acesso. A IEEE recomenda a adoção de \textit{Single Sign-On} (SSO) baseado na cloud juntamente com Autenticação Multifator (MFA) para proteger o acesso dos utilizadores. Adicionalmente, as identidades das máquinas e dispositivos (como portáteis, telemóveis e software) também têm de ser rigorosamente estabelecidas, identificadas e catalogadas. O acesso às aplicações e serviços baseia-se no nível de confiança resultante da combinação da identidade do dispositivo, da sua integridade e da autenticação do utilizador.
+
+\subsection{Controlo de Acesso}
+O acesso aos recursos empresariais é autorizado e concedido apenas para completar tarefas específicas, aplicando ativamente o princípio do menor privilégio. O controlo das permissões opera sessão a sessão, garantindo que as autorizações são dinâmicas e rigorosamente impostas antes de se permitir o acesso ao recurso. A arquitetura recorre a um Motor de Políticas (\textit{Policy Engine}) que medeia os pedidos e configura redes de sobreposição (\textit{overlay networks}) ou sistemas de micro-segmentação, limitando efetivamente os acessos indevidos e isolando a rede.
+
+\subsection{Avaliação de Confiança}
+A avaliação da confiança é o mecanismo central que mede a fiabilidade das entidades na rede para fundamentar decisões analíticas de acesso. Na ZTA, a confiança tem de ser constantemente conquistada e validada internamente por sistemas que dependem de algoritmos computacionais específicos de confiança. Conforme documentado no estudo sobre o \textit{framework} de segurança GAZETA publicado na IEEE Xplore, a arquitetura calcula uma pontuação de confiança (\textit{trust score}) baseada em múltiplas métricas que variam perante alterações de ambiente.
+
+\section{Avaliação Contínua}
+No paradigma Zero Trust, a confiança é um estado transitório e condicional, rejeitando a ideia de que a validação no momento do \textit{login} concede um livre-trânsito para a sessão inteira.
+
+\begin{itemize}
+  \item \textbf{Reavaliação Constante:} A confiança estabelecida inicialmente não é definitiva. Após o primeiro acesso, o sistema exige provas contínuas de que o utilizador e o dispositivo se mantêm fidedignos ao longo de toda a interação com a infraestrutura.
+  \item \textbf{Monitorização e Registo (Logging):} A visibilidade total é um requisito obrigatório. As organizações devem monitorizar a postura de segurança e a integridade de todos os ativos de forma ininterrupta. Isto implica a recolha e registo exaustivo de dados (\textit{logs}) sobre o tráfego da rede, o estado das comunicações e o comportamento dos utilizadores, permitindo reavaliar a infraestrutura ao mais pequeno sinal de anomalia.
+  \item \textbf{Mecanismos Matemáticos:} A velocidade e precisão necessárias para recalcular os níveis de risco em tempo real ultrapassam a capacidade de regras estáticas. A avaliação de confiança é alimentada por algoritmos avançados, recorrendo a modelos de \textit{Machine Learning} e lógica difusa (\textit{fuzzy logic}). Estas tecnologias analisam padrões de comportamento, classificam desvios e reajustam a pontuação de confiança de forma dinâmica e automatizada.
+\end{itemize}
+
+\section{Impacto na Infraestrutura}
+Devido a este processo de reavaliação rigorosa e constante, a infraestrutura exige maior capacidade de processamento, garantindo assim que os pedidos não autorizados sejam identificados e bloqueados em tempo real de forma eficaz e que as políticas respondam dinamicamente aos riscos.
+
 
 \section{Dominínios de aplicação}
 
