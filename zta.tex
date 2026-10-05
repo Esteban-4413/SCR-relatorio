@@ -1,34 +1,297 @@
-\documentclass{Beamer}
+\documentclass[aspectratio=169,11pt]{beamer}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[portuguese]{babel}
+\usepackage{tikz}
+\usetikzlibrary{positioning,arrows.meta,shapes.geometric,fit,calc,backgrounds}
 
 \usetheme{Frankfurt}
 
-\title{}
-\author{}
-\institute{Universidade do Minho}
-\date{\today}
+% ---------- Cores ----------
+\definecolor{zgrey}{RGB}{190,190,190}
+\definecolor{zblue}{RGB}{200,220,250}
+\definecolor{zorange}{RGB}{230,170,60}
+\definecolor{zgreen}{RGB}{120,185,160}
+\definecolor{zred}{RGB}{214,80,70}
+\definecolor{zdark}{RGB}{50,50,55}
+\definecolor{zpurple}{RGB}{90,90,170}
+
+% ---------- Estilos TikZ ----------
+\tikzset{
+  actor/.style={rectangle,rounded corners=2pt,fill=zdark,text=white,font=\small\bfseries,
+                minimum height=0.8cm,minimum width=1.7cm,align=center},
+  zone/.style={ellipse,fill=zgrey,font=\scriptsize,align=center,minimum height=1cm,
+               minimum width=2.4cm,inner sep=2pt},
+  tzone/.style={ellipse,fill=zblue,font=\scriptsize,align=center,minimum height=1cm,
+                minimum width=2.4cm,inner sep=2pt},
+  pep/.style={rectangle,rounded corners=3pt,fill=zorange,font=\small\bfseries,
+              align=center,minimum height=1cm,minimum width=2cm},
+  pdp/.style={rectangle,rounded corners=3pt,fill=zgreen,font=\small\bfseries,
+              align=center,minimum height=0.9cm},
+  src/.style={rectangle,rounded corners=2pt,fill=zgrey!60,font=\tiny,align=center,
+              minimum height=0.5cm,minimum width=1.5cm},
+  flow/.style={-{Stealth[length=2.2mm]},thick},
+  pill/.style={rectangle,rounded corners=6pt,draw=none,fill=zpurple,text=white,
+               font=\small\bfseries,align=center,minimum height=1.1cm,minimum width=3.2cm},
+  stage/.style={circle,fill=zblue,draw=zpurple,thick,font=\scriptsize,align=center,
+               minimum size=1.25cm,inner sep=1pt},
+  node dot/.style={circle,fill=zgreen!70,minimum size=0.55cm,inner sep=0pt,font=\tiny}
+}
+
+\title{Arquitetura Zero Trust}
+\subtitle{Fundamentos, componentes, aplicações e desafios}
+\author{David Lobo \and Pedro Rosa \and Esteban Yepez}
+\institute{Universidade do Minho \\ Sistemas de Comunicações e Redes}
+\date{06/10/2026}
 
 \begin{document}
 
 \begin{frame}
-    \titlepage
+  \titlepage
 \end{frame}
 
-\section{}
-
-\begin{frame}{}
+\begin{frame}{Objetivos}
+  \begin{itemize}
+    \item Perceber \textbf{porque} o modelo de segurança baseado em perímetro deixou de ser suficiente
+    \item Clarificar o que significa \textbf{confiança} no paradigma \textit{Zero Trust}
+    \item Descrever o \textbf{modelo lógico do NIST} (SP 800-207) e os seus pilares técnicos
+    \item Analisar \textbf{domínios de aplicação} e \textbf{desafios} de implementação
+  \end{itemize}
 \end{frame}
 
-\begin{}{Objetivos}
+\section{Introdução}
+
+\begin{frame}{Do perímetro ao \textit{Zero Trust}}
+  \centering
+  \begin{tikzpicture}[font=\small]
+    % ---- Perímetro ----
+    \node[font=\bfseries] at (0,3.1) {Modelo de perímetro};
+    \draw[rounded corners=6pt,fill=zblue,draw=zpurple,thick] (-2.4,0) rectangle (2.4,2.7);
+    \node[font=\scriptsize] at (0,2.4) {Rede interna = confiança implícita};
+    \node[node dot] (a) at (-1.3,1.2) {};
+    \node[node dot] (b) at (0,0.6) {};
+    \node[node dot] (c) at (1.3,1.4) {};
+    \draw[zred,thick,dashed,-{Stealth}] (a) -- (b);
+    \draw[zred,thick,dashed,-{Stealth}] (b) -- (c);
+    \node[font=\tiny,zred] at (0.1,1.45) {movimento lateral};
+    \node[actor,fill=zred,minimum width=1.4cm] (att) at (-4.3,1.3) {Atacante};
+    \node[font=\tiny] at (-2.4,1.75) {\textit{firewall}};
+    \draw[zred,thick,-{Stealth}] (att) -- (a);
+
+    % ---- Zero Trust ----
+    \node[font=\bfseries] at (7,3.1) {\textit{Zero Trust}};
+    \node[node dot] (n1) at (5.3,0.5) {};
+    \node[node dot] (n2) at (7,1.9) {};
+    \node[node dot] (n3) at (8.7,0.5) {};
+    \foreach \i in {n1,n2,n3}{
+      \node[draw=zorange,thick,rounded corners=2pt,fit=(\i),inner sep=3pt] {};
+    }
+    \node[actor] (u) at (4.6,2.4) {Sujeito};
+    \draw[flow,zpurple] (u) -- node[above,font=\tiny,sloped]{verificar} (n1);
+    \draw[flow,zpurple] (u) -- node[above,font=\tiny,sloped]{verificar} (n2);
+    \draw[flow,zpurple,bend left=18] (u) to (n3);
+    \node[font=\scriptsize,align=center] at (7,-0.5) {cada recurso é protegido;\\sem zona de confiança implícita};
+  \end{tikzpicture}
+
+  \vspace{0.2cm}
+  \begin{block}{Ideia central}
+    ``Nunca confiar, verificar sempre'' (Kindervag, 2010), consolidado pelo NIST na SP 800-207 (2020):
+    deixa de existir distinção entre utilizadores internos e externos.
+  \end{block}
 \end{frame}
 
-\section{}
 
-\begin{}{Diseño de la solución}
+\begin{frame}{Exemplo prático: \textit{BeyondCorp} (Google)}
+  \begin{columns}[c]
+    \begin{column}{0.52\textwidth}
+      \begin{itemize}
+        \item Elimina a \textbf{rede corporativa privilegiada}
+        \item Acesso \textbf{autenticado, autorizado e cifrado}, segundo o dispositivo e o utilizador
+        \item Implementado por completo em \textbf{2017}; manteve-se seguro com o teletrabalho (COVID-19)
+      \end{itemize}
+    \end{column}
+    \begin{column}{0.46\textwidth}
+      \centering
+      \resizebox{\linewidth}{!}{%
+      \begin{tikzpicture}[font=\small]
+        \node[actor,minimum width=2cm] (u) at (0,0.9) {Utilizador};
+        \node[actor,minimum width=2cm] (d) at (0,-0.5) {Dispositivo};
+        \node[pep,minimum width=2.4cm] (dec) at (3.3,0.2) {\scriptsize Decisão\\\scriptsize de acesso};
+        \node[actor,minimum width=1.8cm] (app) at (6.3,0.2) {Aplicação};
+        \draw[flow] (u) -- (dec);
+        \draw[flow] (d) -- (dec);
+        \draw[flow] (dec) -- (app);
+        \node[font=\tiny,align=center,text=zpurple] at (3.3,-1.3) {identidade $\cdot$ estado do dispositivo $\cdot$ contexto};
+        \node[font=\tiny,align=center,zred] at (3.3,1.4) {sem VPN nem rede privilegiada};
+      \end{tikzpicture}}
+    \end{column}
+  \end{columns}
+  \vspace{0.1cm}
+  \begin{block}{Ideia}
+    O acesso depende da \textbf{identidade e do contexto}, não da \textbf{localização na rede}.
+  \end{block}
 \end{frame}
 
-\begin{}{Herramientas utilizadas}
-    \begin{itemize}
-    \end{itemize}
+\begin{frame}{O conceito de confiança}
+  \begin{block}{Definição clássica (Rousseau et al.)}
+    Estado psicológico que inclui a intenção de \textbf{aceitar a vulnerabilidade}, com base em expectativas positivas sobre o comportamento de outrem.
+  \end{block}
+  \vspace{0.1cm}
+  \centering
+  \resizebox{0.92\textwidth}{!}{%
+  \begin{tikzpicture}[font=\small]
+    \node[font=\bfseries] at (1.3,2.0) {Perímetro};
+    \node[font=\bfseries] at (7.9,2.0) {\textit{Zero Trust}};
+    \node[pill,fill=zred] (a1) at (0,1) {Confiança\\implícita};
+    \node[pill,fill=zred!70,minimum width=2.6cm] (a2) at (3.0,1) {persistente};
+    \node[pill,fill=zgreen!80!black] (b1) at (6.4,1) {Confiança\\explícita};
+    \node[pill,fill=zgreen!60!black,minimum width=2.6cm] (b2) at (9.4,1) {dinâmica};
+    \node[font=\scriptsize,align=center] at (1.4,0.1) {herdada da localização;\\mantida até ser reavaliada};
+    \node[font=\scriptsize,align=center] at (7.9,0.1) {concedida por contexto, com a\\granularidade mínima e reavaliada};
+    \draw[flow,gray] (4.2,1) -- (4.8,1);
+  \end{tikzpicture}}
+
+  \vspace{0.2cm}
+  \begin{alertblock}{``Zero'' não é ausência de confiança}
+    É \textbf{zero confiança implícita}: a confiança passa a ser explícita, contextual e sujeita a avaliação constante.
+  \end{alertblock}
+\end{frame}
+
+\section{Fundamentos}
+
+\begin{frame}{Modelo lógico do NIST}
+  \centering
+  \resizebox{\textwidth}{!}{%
+  \begin{tikzpicture}[node distance=0.55cm]
+    % Plano de dados
+    \node[actor] (s) {Sujeito};
+    \node[zone,right=of s] (u) {Zona\\não confiável};
+    \node[pep,right=of u] (pep) {PEP};
+    \node[tzone,right=of pep] (t) {Zona de\\confiança implícita};
+    \node[actor,right=of t] (r) {Recurso};
+    \draw[flow] (s) -- (u);
+    \draw[flow] (u) -- (pep);
+    \draw[flow] (pep) -- (t);
+    \draw[flow] (t) -- (r);
+
+    \node[pdp,above=1.9cm of pep,minimum width=3.2cm] (pe) {Policy Engine\\[-2pt]\scriptsize decide};
+    \node[pdp,right=0.3cm of pe,minimum width=3.2cm] (pa) {Policy Administrator\\[-2pt]\scriptsize executa};
+    \begin{scope}[on background layer]
+      \node[rectangle,rounded corners=4pt,fill=zgreen!25,draw=zgreen,thick,
+            fit=(pe)(pa),inner sep=6pt,label={[font=\scriptsize\bfseries]above:PDP}] (pdpbox) {};
+    \end{scope}
+    \draw[flow,<->] (pep) -- (pep |- pdpbox.south);
+
+    \node[src,left=1.2cm of pdpbox.west,yshift=0.35cm] (s1) {CDM};
+    \node[src,below=0.12cm of s1] (s2) {SIEM};
+    \node[src,below=0.12cm of s2] (s3) {PKI \& Identidades};
+    \node[src,above=0.12cm of s1] (s4) {\textit{Threat intelligence}};
+    \draw[flow,gray] ($(s1.east)!0.5!(s2.east)$) -- (pdpbox.west);
+
+    \draw[dashed,thick,gray] ([xshift=-0.6cm,yshift=0.65cm]s.west |- pep.north) -- ([xshift=0.6cm,yshift=0.65cm]r.east |- pep.north);
+    \node[font=\scriptsize\bfseries,gray,anchor=south east] at ([xshift=0.6cm,yshift=0.65cm]r.east |- pep.north) {Plano de controlo};
+    \node[font=\scriptsize\bfseries,gray,anchor=north east] at ([xshift=0.6cm,yshift=0.65cm]r.east |- pep.north) {Plano de dados};
+  \end{tikzpicture}}
+
+  \vspace{0.1cm}
+  \begin{itemize}
+    \item O \textbf{PEP} aplica a decisão junto ao recurso; o \textbf{PDP} decide com base num \textit{algoritmo de confiança}
+    \item A \textbf{zona de confiança implícita} deve ser tão pequena quanto possível
+  \end{itemize}
+\end{frame}
+
+\section{Pilares técnicos}
+
+\begin{frame}{Pilares técnicos e avaliação contínua}
+  \centering
+  \begin{tikzpicture}[node distance=0.5cm]
+    \node[pill] (p1) {Autenticação\\de identidade};
+    \node[pill,right=of p1] (p2) {Controlo\\de acesso};
+    \node[pill,right=of p2] (p3) {Avaliação\\de confiança};
+    \node[font=\scriptsize,below=0.1cm of p1,text width=3.2cm,align=center]{utilizadores e dispositivos; MFA};
+    \node[font=\scriptsize,below=0.1cm of p2,text width=3.2cm,align=center]{menor privilégio; RBAC, ABAC; micro-segmentação};
+    \node[font=\scriptsize,below=0.1cm of p3,text width=3.2cm,align=center]{valor de confiança dependente do contexto};
+  \end{tikzpicture}
+
+  \vspace{0.5cm}
+  \begin{tikzpicture}[node distance=0.7cm]
+    \node[stage] (a) {Pedido};
+    \node[stage,right=of a] (b) {Avaliar\\confiança};
+    \node[stage,right=of b] (c) {Decidir\\acesso};
+    \node[stage,right=of c] (d) {Monitorizar\\e registar};
+    \draw[flow] (a) -- (b);
+    \draw[flow] (b) -- (c);
+    \draw[flow] (c) -- (d);
+    \draw[flow,zred,rounded corners=6pt] (d.south) -- ++(0,-0.7) -| node[pos=0.25,below,font=\scriptsize]{reavaliação constante} (b.south);
+  \end{tikzpicture}
+
+  \vspace{0.4cm}
+  A confiança \textbf{nunca é definitiva}: \textit{machine learning}, lógica difusa e outros métodos recalculam o risco dinamicamente.
+\end{frame}
+
+\section{Aplicações e desafios}
+
+\begin{frame}{Domínios de aplicação}
+  \begin{columns}[T]
+    \begin{column}{0.32\textwidth}
+      \begin{block}{Acesso remoto}
+        Teletrabalho e BYOD: acesso decidido por identidade, dispositivo e contexto, com menor privilégio.
+      \end{block}
+    \end{column}
+    \begin{column}{0.32\textwidth}
+      \begin{block}{Entidades externas}
+        Acesso por sessão, limitado no tempo e aos recursos necessários, com registo e auditoria.
+      \end{block}
+    \end{column}
+    \begin{column}{0.32\textwidth}
+      \begin{block}{\textit{Ransomware}}
+        A micro-segmentação dificulta a propagação lateral do ataque.
+      \end{block}
+    \end{column}
+  \end{columns}
+  \vspace{0.3cm}
+  \begin{alertblock}{Estudo de caso: IoMT}
+    Dados sensíveis, dispositivos com poucos recursos e resposta em tempo real:
+    um cenário que põe a ZTA à prova (autenticação leve nos dispositivos, orquestrador \textit{Zero Trust} no \textit{edge} e na \textit{cloud}).
+  \end{alertblock}
+\end{frame}
+
+\begin{frame}{Desafios de implementação}
+  \begin{columns}[T]
+    \begin{column}{0.32\textwidth}
+      \begin{block}{Latência}
+        A verificação contínua acrescenta processamento a cada pedido.
+      \end{block}
+    \end{column}
+    \begin{column}{0.32\textwidth}
+      \begin{block}{Sistemas legados}
+        Dificuldade em integrar MFA, micro-segmentação e APIs modernas.
+      \end{block}
+    \end{column}
+    \begin{column}{0.32\textwidth}
+      \begin{block}{Gestão de políticas}
+        Políticas dinâmicas e granulares aumentam a complexidade operacional.
+      \end{block}
+    \end{column}
+  \end{columns}
+  \vspace{0.4cm}
+  \begin{itemize}
+    \item Faltam medições de desempenho de ZTA em sistemas reais
+    \item Em ambientes com recursos limitados (IoT, IoMT) o custo é ainda mais crítico
+  \end{itemize}
+\end{frame}
+
+\section{Conclusões}
+
+\begin{frame}{Conclusões}
+  \begin{itemize}
+    \item A ZTA substitui a confiança \textbf{implícita} (da localização) por confiança \textbf{explícita}, contextual e reavaliada
+    \item Assenta em \textbf{autenticação}, \textbf{controlo de acesso} e \textbf{avaliação contínua} de confiança
+    \item Reduz a superfície de ataque e limita o movimento lateral
+    \item Persistem desafios: \textbf{latência}, \textbf{sistemas legados} e \textbf{complexidade} de gestão
+  \end{itemize}
+  \vfill
 \end{frame}
 
 \end{document}
