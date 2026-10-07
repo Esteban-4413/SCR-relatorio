@@ -1,6 +1,0 @@
-\babel@toc {portuguese}{}\relax 
-\beamer@sectionintoc {1}{Introdução}{3}{0}{1}
-\beamer@sectionintoc {2}{Fundamentos}{6}{0}{2}
-\beamer@sectionintoc {3}{Pilares técnicos}{7}{0}{3}
-\beamer@sectionintoc {4}{Aplicações e desafios}{8}{0}{4}
-\beamer@sectionintoc {5}{Conclusões}{10}{0}{5}
