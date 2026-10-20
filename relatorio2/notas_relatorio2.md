@@ -12,3 +12,7 @@ Screenshot para resolver as perguntas:
 ![[TCP.png]]
 
 ![[hypertext transfer protocol.png]]
+
+Pedido `GET`:
+
+![[GET.png]]
