@@ -16,3 +16,9 @@ Screenshot para resolver as perguntas:
 Pedido `GET`:
 
 ![[GET.png]]
+
+Configuração do display de wireshark no terminal do core.
+```bash
+> export DISPLAY=:0.0 
+> wireshark
+```
