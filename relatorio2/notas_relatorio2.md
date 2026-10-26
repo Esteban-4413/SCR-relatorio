@@ -76,7 +76,7 @@ O "G" (`47`) está no *offset* `0x42` = 66 da trama (linha `0040` do *hex dump*:
 - Tamanho total enviado: 8 + 481 + 4 = **493 B**
 - Sobrecarga = 8 + 66 + 4 = **78 B**
 
-> **Sobrecarga = 78 / 493 $\aprox$ 15,8 %**
+> **Sobrecarga = 78 / 493 $\approx$ 15,8 %**
 
 (Sem contar camada física nem FCS seria 66/481 ≈ 13,7 %. Refere ambos se quiseres, mas o enunciado pede o primeiro.)
 
