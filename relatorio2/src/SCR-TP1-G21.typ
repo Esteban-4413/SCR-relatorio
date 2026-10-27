@@ -106,7 +106,7 @@ Sobrecarga:
   [Tamanho total enviado: 8 + 481 + 4 = *493 B*],
   [Sobrecarga = 8 + 66 + 4 = *78 B* ],
 )
-*Sobrecarga = $78 / 493 = 15,8 %$*
+*Sobrecarga = $78 / 493 approx 15,8 %$*
 
 === Pergunta 4
 Quais são os endereços Ethernet da origem e destino? A que sistemas de rede correspondem? Justifique. *(trama com o primeiro byte da resposta HTTP)*
