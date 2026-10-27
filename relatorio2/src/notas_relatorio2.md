@@ -246,7 +246,7 @@ Tabela `< endereço MAC | porta >`: uma entrada por equipamento ligado ao switch
 
 ---
 
-## Parte 2: Redes sem fios (IEEE 802.11) 🔧
+## Parte 2: Redes sem fios (IEEE 802.11)
 
 Abre `trace-wlan-tp1.pcap` no Wireshark. **Substitui XX pelo teu número de grupo.**
 

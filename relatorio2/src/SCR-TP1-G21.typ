@@ -7,13 +7,11 @@
   addr: "",
 )
 
-
 #show: lncs.with(
   title: "TP 1",
   // Opt.: Set this, if the title is too long to avoid linebreaks in the header of odd pages
   // running-title: "Short version of contribution title",
   // running-author: "Override the default author shortening",
-  thanks: "Supported by organization x.",
   authors: (
     author(
       "Pedro Rosa",
@@ -27,10 +25,6 @@
     ),
     author("Esteban Yepez", insts: (inst_uminho), oicd: "a117634"),
   ),
-  abstract: [
-    The abstract should briefly summarize the contents of the paper in
-    15--250 words.
-  ],
   bibliography: bibliography("refs.bib"),
   // optional configuration of page (takes all page parameter)
   // page_config: (paper: "a4")
@@ -98,15 +92,14 @@ Quantos bytes são usados desde o início da trama até ao caractere ASCII "G" d
 
 Tal e como esta ilustrado em @table-1 o "G" (`47`) está no offset `0x42` = 66 da trama (linha `0040` do *hex dump*: `cd 1d 47 45 54`), por isso são usados *66 bytes* antes do "G" (74 se contares o preâmbulo + SFD de 8 bytes).
 
-
-Sobrecarga:
+*Sobrecarga:*
 #list(
   [*Payload* HTTP (TCP payload) = *415 B*. Confere: 66 + 415 = 481 B (tamanho da trama).],
   [Camada física: preâmbulo 7 B + SFD 1 B = *8 B*; FCS = *4 B*.],
   [Tamanho total enviado: 8 + 481 + 4 = *493 B*],
-  [Sobrecarga = 8 + 66 + 4 = *78 B* ],
+  [nSobrecarga = 8 + 66 + 4 = *78 B* ],
 )
-*Sobrecarga = $78 / 493 approx 15,8 %$*
+Sobrecarga = $78 / 493 approx 15,8 %$
 
 === Pergunta 4
 Quais são os endereços Ethernet da origem e destino? A que sistemas de rede correspondem? Justifique. *(trama com o primeiro byte da resposta HTTP)*
@@ -118,9 +111,9 @@ Atendendo ao conceito de desencapsulamento protocolar, identifique os vários pr
 === Pergunta 6
 Abra uma consola no host onde efetuou o ping. Observe o conteúdo da tabela ARP com o comando `arp`.
 
-- **a)** Colunas (`man arp`): *Address* (IP do vizinho), *HWtype* (tipo de ligação, normalmente `ether`), *HWaddress* (endereço MAC resolvido), *Flags Mask* (`C` = entrada completa/dinâmica; `M` = permanente) e *Iface* (interface de rede).
-- **b)** Em princípio um dos **routers**, o que tem mais vizinhos diretos na mesma rede local. O RA tem na LAN do Depto A 4 PCs + 1 servidor (5 hosts) e ainda o RB, ou seja, até 6 entradas. O RB só tem o hub (3 PCs) + RA + RC (5). Justifica com o que vês na topologia que montaste.
-- **c)** Para completar a tabela do router, faz `ping` do router a **todos** os hosts da LAN dele (ou o inverso), de forma a gerar um pedido ARP para cada vizinho. Mostra a tabela completa com `arp`.
+- *a)* Colunas (`man arp`): *Address* (IP do vizinho), *HWtype* (tipo de ligação, normalmente `ether`), *HWaddress* (endereço MAC resolvido), *Flags Mask* (`C` = entrada completa/dinâmica; `M` = permanente) e *Iface* (interface de rede).
+- *b)* Em princípio um dos *routers*, o que tem mais vizinhos diretos na mesma rede local. O RA tem na LAN do Depto A 4 PCs + 1 servidor (5 hosts) e ainda o RB, ou seja, até 6 entradas. O RB só tem o hub (3 PCs) + RA + RC (5). Justifica com o que vês na topologia que montaste.
+- *c)* Para completar a tabela do router, faz `ping` do router a *todos* os hosts da LAN dele (ou o inverso), de forma a gerar um pedido ARP para cada vizinho. Mostra a tabela completa com `arp`.
 
 === Pergunta 7
 Qual é o valor hexadecimal dos endereços origem e destino na trama Ethernet que contém o ARP Request? Como interpreta e justifica o endereço destino usado?
@@ -136,9 +129,9 @@ Explicite, em linguagem comum, que tipo de pedido ou pergunta é feita pelo host
 
 === Pergunta 11
 Localize a mensagem ARP que é a resposta ao pedido ARP efetuado.
-- **a)** **Opcode = 2** (*reply*): indica que é uma resposta ARP.
-- **b)** A resposta está no campo **Sender MAC address** da mensagem de resposta (o MAC de quem tinha o IP perguntado).
-- **c)** A resposta é **unicast**, porque o MAC do requerente já é conhecido (veio no pedido, no *Sender MAC*), não é necessário difundir.
+- *a)* *Opcode = 2* (*reply*): indica que é uma resposta ARP.
+- *b)* A resposta está no campo *Sender MAC address* da mensagem de resposta (o MAC de quem tinha o IP perguntado).
+- *c)* A resposta é *unicast*, porque o MAC do requerente já é conhecido (veio no pedido, no *Sender MAC*), não é necessário difundir.
 
 === Pergunta 14
 Verifique se o ping feito ao segundo PC originou pacotes ARP e justifique a situação observada.

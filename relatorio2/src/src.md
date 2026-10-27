@@ -2,6 +2,7 @@
  [[universidade/2ano/1semestre/SCR/PLs/relatorios/relatorio2/src/fig1.svg|fig1.svg]]
  [[universidade/2ano/1semestre/SCR/PLs/relatorios/relatorio2/src/imgs/imgs|imgs]]
  [[universidade/2ano/1semestre/SCR/PLs/relatorios/relatorio2/src/notas_relatorio2|notas_relatorio2]]
+ [[universidade/2ano/1semestre/SCR/PLs/relatorios/relatorio2/src/notas_v2|notas_v2]]
  [[universidade/2ano/1semestre/SCR/PLs/relatorios/relatorio2/src/refs.bib|refs.bib]]
  [[universidade/2ano/1semestre/SCR/PLs/relatorios/relatorio2/src/SCR-TP1-G21.pdf|SCR-TP1-G21.pdf]]
  [[universidade/2ano/1semestre/SCR/PLs/relatorios/relatorio2/src/SCR-TP1-G21.typ|SCR-TP1-G21.typ]]
