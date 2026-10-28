@@ -26,6 +26,59 @@ Configuração do display de wireshark no terminal do core.
 > wireshark
 ```
 
+# O que falta fazer no CORE (≈ 30-40 min)
+
+> **Problema nas capturas atuais:** `arp -d -a` **não apagou nada**, só listou a tabela (um `delete` bem-sucedido não imprime nada, e a entrada `10.0.0.1` continuou lá). A entrada que importa é a do *gateway* `10.0.0.1`. Sem a apagar, o `ping` pode nem gerar ARP.
+
+## A) ARP Request/Reply (P7-P11, P14, P15) em **n5**
+1. No terminal de n5: `export DISPLAY=:0.0` e `wireshark &` → capturar em `eth0`.
+
+![[wireshark1.png]]
+
+2. No terminal de n5:
+   ```bash
+   arp -d 10.0.0.1      # ou: ip neigh flush all
+   arp                  # tem de aparecer vazia
+   ping -c 1 10.0.3.20  # 1.º ping → gera ARP
+   ping -c 1 10.0.3.21  # 2.º ping → não deve gerar ARP
+   arp                  # só a entrada do gateway
+   ```
+
+![[pingn5.png]]
+
+3. Parar a captura, filtro `arp`, e guardar screenshots de: lista (deve haver 2 tramas), **Ethernet II** do Request (endereços + Type), **Address Resolution Protocol** do Request expandido, e o mesmo para o Reply.
+
+![[arpFilter1.png]]
+
+![[arpFilter2.png]]
+
+![[arpFilter3.png]]
+
+![[arpFilter4.png]]
+
+## B) Tabela ARP de n7 (P6c) e MAC do switch (P16)
+No terminal de **n7**:
+```bash
+for i in 20 21 22 23 24; do ping -c 1 10.0.0.$i; done
+ping -c 1 10.0.1.2
+arp
+```
+Esperam-se **6 entradas** (n2, n1, n3, n4, n5 por `eth0` + n8 por `eth1`). O mesmo ecrã dá-te os MAC para a P16.
+
+![[arpTable.png]]
+
+## C) tcpdump (P15 colisão): tem de ser tráfego **intra**-departamento
+- **Depto A:** em n3, n4 e n5 correr `tcpdump -n -e -i eth0 icmp or arp`. Em n1: `ip neigh flush all` e depois `ping -c 5 10.0.0.20` (n1 → n2).
+
+![[tcpdumpA.png]]
+
+- **Depto B:** em n12 e n13 correr o mesmo `tcpdump`, **antes** de começar o ping. Em n11: `ping -c 5 10.0.3.21` (n11 → n12).
+
+![[tcpdumpB.png]]
+
+- ⚠️ Se em B o n13 **não** vir o ICMP entre n11 e n12, o `n10` não está a comportar-se como hub (no canvas, n6 e n10 têm o mesmo ícone). Verifica o tipo do nó e, se for preciso, troca por um **Hub**. (THIS WAS FIXED)
+- O filtro `icmp or arp` evita confundir com os *hellos* OSPF (`224.0.0.5`), que aparecem em qualquer LAN.
+
 # SCR TP1 2026: Respostas (rascunho)
 
 ## Parte 1: Ethernet e ARP
@@ -134,7 +187,7 @@ Cada camada, no desencapsulamento, lê o seu cabeçalho e entrega o *payload* à
 - **b)** Em princípio um dos **routers**, o que tem mais vizinhos diretos na mesma rede local. O RA tem na LAN do Depto A 4 PCs + 1 servidor (5 hosts) e ainda o RB, ou seja, até 6 entradas. O RB só tem o hub (3 PCs) + RA + RC (5). Justifica com o que vês na topologia que montaste.
 - **c)** Para completar a tabela do router, faz `ping` do router a **todos** os hosts da LAN dele (ou o inverso), de forma a gerar um pedido ARP para cada vizinho. Mostra a tabela completa com `arp`.
 
-![[topologia.png]]
+![[topologiaFixed.png]]
 
 ping n5 -> n13
 
