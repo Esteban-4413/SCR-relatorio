@@ -101,3 +101,69 @@
 
     Justificação do fluxo: Como demonstrámos nas múltiplas sequências que analisámos no Wireshark, o processo de associação nas redes IEEE 802.11 exige que a estação complete a fase de autenticação com sucesso antes de 
   emitir a trama *Association Request*. O processo termina com o AP a enviar a *Association Response*, finalizando a ligação.
+
+=== Pergunta 12
+
+    Direcionalidade e Destino: Analisando a trama 621 e observando o cabeçalho do frame control field, ao abrir as flags, no DS status, temos (To DS: 1 From Ds: 0) que, quanto à direcionalidade, nos indica que a trama está a ser enviada de um dispositivo para o Access Point(AC).
+
+    Análise de Endereços: Um pouco abaixo, fora das flags, temos os endereços Destination address (O endereço Mac do dispositivo destinatário) e o Receiver address (o endereço mac do Access Point) ambos iguais (74:9b:e8:f3:9a:46).
+
+    Conclusão: Como o destino da trama é o access point, conclui-se que a trama é local à WLan.
+
+=== Pergunta 13
+
+    Endereço da Estação (STA): O endereço MAC do host sem fios (STA) está disponível no STA address (b8:2d:28:7a:9b:68).
+
+    Endereço do Ponto de Acesso (AP): O endereço MAC do Access Point é o endereço associado ao BSS Id (74:9b:e8:f3:9a:46).
+
+    Endereço do Router: E finalmente, o endereço MAC do router de acesso ao sistema de distribuição também será o mesmo (74:9b:e8:f3:9a:46).
+
+  === Pergunta 14 
+
+  Redes Ethernet (com fios): Verificámos que nestas redes se utiliza o mecanismo de acesso CSMA/CD (Collision Detection). Como a comunicação é feita por um cabo elétrico, a placa de rede consegue transmitir dados e, ao mesmo tempo, "escutar" a tensão no cabo. Se duas máquinas transmitirem ao mesmo tempo, ocorre uma alteração física no sinal elétrico que ambas detetam imediatamente (detetam a colisão), abortando o envio. Concluímos que, como a rede deteta as falhas em tempo real, não precisa de confirmações constantes para cada pacote.
+
+    Redes Wi-Fi (sem fios): Constatámos que se utiliza o mecanismo CSMA/CA (Collision Avoidance). Um rádio Wi-Fi funciona em modo half-duplex, o que significa que não consegue transmitir e receber dados em simultâneo no mesmo canal. Quando um dispositivo está a emitir uma trama para o ar, fica "surdo" ao que se passa à sua volta e não consegue detetar se o seu sinal colidiu com o de outro dispositivo.
+
+    A função do ACK: Analisando o funcionamento, percebemos que, como o emissor Wi-Fi não tem forma de detetar colisões por si próprio, necessita de um 
+    mecanismo de confirmação explícita. É por isso que o recetor é obrigado a enviar uma trama de controlo ACK (Acknowledge) sempre que recebe uma trama de
+    dados com sucesso. Se o emissor original não receber esse ACK num curto espaço de tempo, assume que houve uma colisão (ou muita interferência) e volta a retransmitir a trama original.
+
+
+=== Pergunta 15
+
+  
+    Sistemas Envolvidos: Ao analisarmos a captura, identificámos que a comunicação ocorre essencialmente entre a estação cliente (STA) `AMPAKTechnol_7a:9b:...` e o ponto de acesso (AP) `HitronTechno_f3:9a:...`.
+
+    1. Diagrama de Sequência: Transferência COM opção RTS/CTS
+    Com base nos pacotes 288 a 291 da nossa captura, traçámos o seguinte processo. Este diagrama ilustra de forma clara a "pré-reserva" do canal, que 
+    acontece em 4 passos:
+
+    STA (AMPAKTechnol)                                      AP (HitronTechno)
+            |                                                       |
+            | --- 1. Request-to-send (Pacote 288) ----------------> | (Pedido)
+            | <--- 2. Clear-to-send (Pacote 289) ------------------ | (Autorização)
+            |                                                       |
+            | --- 3. QoS Data (Pacote 290) -----------------------> | (Envio de Dados)
+            | <--- 4. Block Ack (Pacote 291) ---------------------- | (Confirmação)
+            |                                                       |
+            V                                                       V
+
+    2. Diagrama de Sequência: Transferência SEM opção RTS/CTS
+    Olhando agora para os pacotes 368 e 369, ilustrámos uma transferência direta mais comum, que ocupa apenas 2 passos. Neste caso não existe uma pré-reserva; a 
+    estação simplesmente verifica se o canal está livre e avança com a transmissão:
+
+    STA (AMPAKTechnol)                                      AP (HitronTechno)
+            |                                                       |
+            | --- 1. Null function [No data] (Pacote 368) --------> | (Envio de Dados)
+            | <--- 2. Acknowledgement (Pacote 369) ---------------- | (Confirmação)
+            |                                                       |
+            V                                                       V
+    
+    Nota de análise: Pode parecer um pouco estranho usar um pacote chamado "Null function (No data)" para este exemplo, mas constatámos que o protocolo 802.11 classifica tecnicamente este pacote como uma trama de Dados (Type 2). Por esse motivo, considerámo-lo um exemplo perfeitamente válido para ilustrar uma transferência de 
+    dados sem RTS/CTS que exige uma confirmação imediata.
+
+    === Conclusão Parte 2
+
+    Através da análise de tráfego no Wireshark, o nosso grupo consolidou de forma prática os conceitos teóricos do protocolo IEEE 802.11. Aprendemos a identificar parâmetros cruciais da camada física, como a frequência, a norma em uso e a avaliar a qualidade da ligação através da relação Sinal/Ruído (SNR). Observámos também as diferenças entre o scanning passivo (através de tramas Beacon enviadas a baixo débito para garantir maior alcance) e ativo (Probe Request/Response), mapeando na prática o processo estruturado que exige sempre a autenticação prévia de um dispositivo antes de concluir a sua associação à rede.
+
+A nível estrutural e de acesso ao meio, compreendemos a arquitetura complexa de endereçamento do Wi-Fi face à Ethernet e a utilização de flags de direcionalidade para rastrear a informação. Consolidámos a distinção fundamental entre CSMA/CD e CSMA/CA, percebendo que a natureza half-duplex dos rádios impede a deteção nativa de colisões. Esta limitação revelou-nos a importância vital das tramas de confirmação (ACK) e dos mecanismos de pré-reserva de canal (RTS/CTS), ilustrando perfeitamente como o protocolo contorna as adversidades e garante fiabilidade num meio de transmissão partilhado e suscetível a interferências.
