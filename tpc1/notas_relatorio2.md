@@ -25,11 +25,12 @@ Configuração do display de wireshark no terminal do core.
 
 # O que falta fazer no CORE (≈ 30-40 min)
 
+![[topololgia2.png]]
+
 > **Problema nas capturas atuais:** `arp -d -a` **não apagou nada**, só listou a tabela (um `delete` bem-sucedido não imprime nada, e a entrada `10.0.0.1` continuou lá). A entrada que importa é a do *gateway* `10.0.0.1`. Sem a apagar, o `ping` pode nem gerar ARP.
 
 ## A) ARP Request/Reply (P7-P11, P14, P15) em **n5**
 1. No terminal de n5: `export DISPLAY=:0.0` e `wireshark &` → capturar em `eth0`.
-
 
 2. No terminal de n5:
    ```bash
@@ -41,8 +42,19 @@ Configuração do display de wireshark no terminal do core.
    ```
 
 
+![[prob2.png]]
+
 3. Parar a captura, filtro `arp`, e guardar screenshots de: lista (deve haver 2 tramas), **Ethernet II** do Request (endereços + Type), **Address Resolution Protocol** do Request expandido, e o mesmo para o Reply.
 
+![[prob31.png]]
+
+![[prob32.png]]
+
+![[prob33.png]]
+
+![[prob34.png]]
+
+![[prob35.png]]
 
 ## B) Tabela ARP de n7 (P6c) e MAC do switch (P16)
 No terminal de **n7**:
@@ -53,16 +65,20 @@ arp
 ```
 Esperam-se **6 entradas** (n2, n1, n3, n4, n5 por `eth0` + n8 por `eth1`). O mesmo ecrã dá-te os MAC para a P16.
 
+![[probBn7.png]]
 
 ## C) tcpdump (P15 colisão): tem de ser tráfego **intra**-departamento
 - **Depto A:** em n3, n4 e n5 correr `tcpdump -n -e -i eth0 icmp or arp`. Em n1: `ip neigh flush all` e depois `ping -c 5 10.0.0.20` (n1 → n2).
 
+![[probCa.png]]
 
 - **Depto B:** em n12 e n13 correr o mesmo `tcpdump`, **antes** de começar o ping. Em n11: `ping -c 5 10.0.3.21` (n11 → n12).
 
 
-- ⚠️ Se em B o n13 **não** vir o ICMP entre n11 e n12, o `n10` não está a comportar-se como hub (no canvas, n6 e n10 têm o mesmo ícone). Verifica o tipo do nó e, se for preciso, troca por um **Hub**. (THIS WAS FIXED)
+- Se em B o n13 **não** vir o ICMP entre n11 e n12, o `n10` não está a comportar-se como hub (no canvas, n6 e n10 têm o mesmo ícone). Verifica o tipo do nó e, se for preciso, troca por um **Hub**. (THIS WAS FIXED)
 - O filtro `icmp or arp` evita confundir com os *hellos* OSPF (`224.0.0.5`), que aparecem em qualquer LAN.
+
+![[probCb]]
 
 # SCR TP1 2026: Respostas (rascunho)
 
