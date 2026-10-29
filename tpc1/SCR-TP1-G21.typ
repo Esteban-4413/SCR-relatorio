@@ -2,6 +2,8 @@
 
 #set text(lang: "pt")
 
+// #set image()
+
 #let inst_uminho = institute(
   "Universidade do Minho",
   addr: "",
@@ -313,26 +315,41 @@ Identifique na mensagem ARP os campos que permitem definir o tipo e o tamanho do
 
 *Resposta* (Frames 305 a 306)
 
-#figure(
-  table(
-    columns: 3,
-    table.hline(),
-    table.header[Campo][Valor][Signinficado],
-    table.hline(),
-    [`Hardware type`], [1], [Ethernet (camada de ligação)],
-    [`Protocol`], [`0x0800`], [IPv4 (camada de redes)],
-    [`Hardware size`], [6], [$"Endereço MAC" = 6 "bytes"$],
-    [`Protocol size`], [4], [$"Endereço IPv4" = 4 "bytes"$],
-    table.hline(),
-  ),
-)
+#figure(caption: [], table(
+  columns: 3,
+  table.hline(),
+  table.header[Campo][Valor][Signinficado],
+  table.hline(),
+  [`Hardware type`], [1], [Ethernet (camada de ligação)],
+  [`Protocol`], [`0x0800`], [IPv4 (camada de redes)],
+  [`Hardware size`], [6], [$"Endereço MAC" = 6 "bytes"$],
+  [`Protocol size`], [4], [$"Endereço IPv4" = 4 "bytes"$],
+  table.hline(),
+))
 
 == Domínios de colisão
 === Pergunta 15
 Através da opção tcpdump, verifique e compare como flui o tráfego nas diversas interfaces dos vários dispositivos no departamento A (LAN comutada) e no departamento B (LAN partilhada) quando gera tráfego intra-departamento.
 
+// TODO
+
 === Pergunta 16
 Apresente a tabela de comutação completa do switch do departamentos
+
+
+#figure(caption: [], table(
+  columns: (auto, auto, auto),
+  table.hline(),
+  table.header([Enderço MAC], [Porta], [Equipamento]),
+  table.hline(),
+  [`00:00:00:aa:00:04`], [P1], [n1],
+  [`00:00:00:aa:00:03`], [P2], [n2],
+  [`00:00:00:aa:00:02`], [P3], [n3],
+  [`00:00:00:aa:00:00`], [P4], [n4],
+  [`00:00:00:aa:00:01`], [P5], [n5 (servidor)],
+  [`00:00:00:aa:00:05`], [P6], [n7 (`eth0`, ligação ao router RA)],
+  table.hline(),
+))
 
 = Redes sem fio (IEEE 802.11)
 == Accesso Rádio

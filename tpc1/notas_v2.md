@@ -234,14 +234,14 @@ Resultado esperado: cada espectador mostra apenas o ARP Request em *broadcast* (
 
 Os MAC vêm da tabela ARP de n7 (`probBn7.png`) e as portas foram atribuídas à escolha (P1 a P6, indicadas no esquema):
 
-| Endereço MAC | Porta | Equipamento |
-|---|---|---|
-| `00:00:00:aa:00:04` | P1 | n1 |
-| `00:00:00:aa:00:03` | P2 | n2 |
-| `00:00:00:aa:00:02` | P3 | n3 |
-| `00:00:00:aa:00:00` | P4 | n4 |
-| `00:00:00:aa:00:01` | P5 | n5 (servidor) |
-| `00:00:00:aa:00:05` | P6 | n7 (`eth0`, ligação ao router RA) |
+| Endereço MAC        | Porta | Equipamento                       |
+| ------------------- | ----- | --------------------------------- |
+| `00:00:00:aa:00:04` | P1    | n1                                |
+| `00:00:00:aa:00:03` | P2    | n2                                |
+| `00:00:00:aa:00:02` | P3    | n3                                |
+| `00:00:00:aa:00:00` | P4    | n4                                |
+| `00:00:00:aa:00:01` | P5    | n5 (servidor)                     |
+| `00:00:00:aa:00:05` | P6    | n7 (`eth0`, ligação ao router RA) |
 
 🔧 Esquema: desenhar o switch n6 com as portas P1 a P6 a ligar a cada equipamento (pode ser sobre a figura da topologia).
 
